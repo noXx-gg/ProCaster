@@ -17,7 +17,7 @@ displayX = 1280
 displayY = 720
 
 screen = pygame.display.set_mode((displayX, displayY))
-pygame.display.set_caption("ProCaster")
+pygame.display.set_caption("ProCaster by Ahmed & Govor Games (feet. Шакальное качество corporation & Shalimich.inc)")
 pygame.display.set_icon(pygame.image.load("logo_icon.ico"))
 
 screen.fill(first_color)
