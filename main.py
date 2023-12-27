@@ -205,6 +205,94 @@ def Game_1():
         # Обновление экрана
         pygame.display.update()
         clock.tick(60)
+# Игра 2
+def Game_2():
+    name = "Infinity"
+
+    # Список активных сфер
+    active_spheres = []
+    # Список активных способностей
+    active_skills = []
+
+    old_skill = None
+    new_skill = skills[random.randint(0, 9)]
+
+    run = True
+    while run:
+
+        # Отрисовка способности, которую нужно создать
+        screen.blit(new_skill.getImagetodesk(), ((displayX - displayX / 9) / 3 + displayX / 9, displayY / 20))
+
+        for event in pygame.event.get():
+
+            # Нажатие Q
+            if event.type == pygame.KEYDOWN and event.key == pygame.K_q:
+                if len(active_spheres) < 3:
+                    active_spheres.append(quas)
+                else:
+                    active_spheres.pop(0)
+                    active_spheres.append(quas)
+
+            # Нажатие W
+            if event.type == pygame.KEYDOWN and event.key == pygame.K_w:
+                if len(active_spheres) < 3:
+                    active_spheres.append(wex)
+                else:
+                    active_spheres.pop(0)
+                    active_spheres.append(wex)
+
+            # Нажатие E
+            if event.type == pygame.KEYDOWN and event.key == pygame.K_e:
+                if len(active_spheres) < 3:
+                    active_spheres.append(exort)
+                else:
+                    active_spheres.pop(0)
+                    active_spheres.append(exort)
+
+            # Нажатие R
+            if event.type == pygame.KEYDOWN and event.key == pygame.K_r:
+                for jz in skills:
+                    if active_spheres.count(quas) == jz.getCast().count(quas)\
+                            and active_spheres.count(wex) == jz.getCast().count(wex)\
+                            and active_spheres.count(exort) == jz.getCast().count(exort):
+                        if len(active_skills) == 0:
+                            active_skills.append(jz)
+                        elif len(active_skills) == 1 and active_skills[0] != jz:
+                            active_skills.append(None)
+                            active_skills[1] = active_skills[0]
+                            active_skills[0] = jz
+                        elif active_skills[0] != jz:
+                            active_skills[1] = active_skills[0]
+                            active_skills[0] = jz
+
+            # Если способность создана правильно
+            if len(active_skills) > 0 and active_skills[0] == new_skill:
+                old_skill = new_skill
+                while old_skill == new_skill:
+                    new_skill = skills[random.randint(0, 9)]
+
+            # Выход из режима
+            if event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
+                run = False
+                break
+
+            # Выход
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                sys.exit()
+
+        # Отрисовка активных сфер
+        PrintSpheres(active_spheres)
+
+        # Отрисовка активных способностей
+        PrintSkills(active_skills)
+
+        # Отрисовка Invoke
+        screen.blit(invoke, (displayX / 9 + displayX / 9 * 5 + displayX / 9, displayY - displayY / 4))
+
+        # Обновление экрана
+        pygame.display.update()
+        clock.tick(60)
 
 
 while True:
@@ -213,6 +301,10 @@ while True:
         # Нажатие 1
         if event.type == pygame.KEYDOWN and event.key == pygame.K_1:
             Game_1()
+
+        # Нажатие 2
+        if event.type == pygame.KEYDOWN and event.key == pygame.K_2:
+            Game_2()
 
         # Выход
         if event.type == pygame.QUIT:
