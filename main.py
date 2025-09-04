@@ -10,14 +10,14 @@ pygame.init()
 # Цвета
 first_color = (200, 200, 200)
 second_color = (25, 25, 25)
-
+third_color = (100, 100, 100)
 
 # Окно
 displayX = 1280
 displayY = 720
 
 screen = pygame.display.set_mode((displayX, displayY))
-pygame.display.set_caption("ProCaster by Ahmed & Govor Games (feet. Шакальное качество corporation & Shalimich.inc)")
+pygame.display.set_caption("ProCaster by Ahmed, MoroZ & Govor Games (feet. Шакальное качество corporation & Shalimich.inc)")
 pygame.display.set_icon(pygame.image.load("logo_icon.ico"))
 
 screen.fill(first_color)
@@ -26,6 +26,8 @@ screen.fill(first_color)
 clock = pygame.time.Clock()
 tick = 60
 
+# Шрифты
+f1 = pygame.font.Font(None, displayY//10)
 
 # Классы и функции
 # Класс сфер
@@ -77,6 +79,38 @@ def PrintSkills(active_skills):
     for j in range(len(active_skills)):
         screen.blit(active_skills[j].getImagetobar(), (displayX / 9 + displayX / 9 * (3 + j) + displayX / 9, displayY - displayY / 4))
 
+# Отрисовка способности, которую нужно создать
+def PrintGlobalSkill(skill):
+    screen.blit(skill.getImagetodesk(), ((displayX - displayX / 9) / 3 + displayX / 9, displayY / 20))
+
+# Отрисовка Invoke
+def PrintInvoke():
+    screen.blit(invoke, (displayX / 9 + displayX / 9 * 5 + displayX / 9, displayY - displayY / 4))
+
+# Закрасить места под активные сферы
+def UnprintSpheres(color):
+    for j in range(3):
+        pygame.draw.rect(screen, color, (displayX / 9 + displayX / 9 * j + displayX / 9, displayY - displayY / 4, displayX / 10, displayY / 5.6), width=0)
+
+# Закрасить места под активные способности
+def UnprintSkills(color):
+    for j in range(2):
+        pygame.draw.rect(screen, color, (displayX / 9 + displayX / 9 * (3 + j) + displayX / 9, displayY - displayY / 4, displayX / 10, displayY / 5.6), width=0)
+
+# Закрасить место  способности, которую нужно создать
+def UnprintGlobalSkill(color):
+    pygame.draw.rect(screen, color, ((displayX - displayX / 9) / 3 + displayX / 9, displayY / 20, displayX / 3, displayY / 1.86), width=0)
+
+# Закрасить Invoke
+def UnprintInvoke(color):
+    pygame.draw.rect(screen, color, (displayX / 9 + displayX / 9 * 5 + displayX / 9, displayY - displayY / 4, displayX / 10, displayY / 5.6), width=0)
+
+# Закрасить всё
+def UnprintAll(color):
+    UnprintSpheres(color)
+    UnprintSkills(color)
+    UnprintGlobalSkill(color)
+    UnprintInvoke(color)
 
 # Менюшка слева
 left_menu = pygame.Surface((displayX/9, displayY))
@@ -119,6 +153,7 @@ def Game_1():
     # Список активных способностей
     active_skills = []
 
+    # Заполнение списка способностей
     skill_list = [skills[random.randint(0, 9)]]
     for i in range(9):
         skill_list.append(skills[random.randint(0, 9)])
@@ -127,11 +162,13 @@ def Game_1():
 
     num = 0
 
+    time1 = time.time()
+
     run = True
     while run:
 
         # Отрисовка способности, которую нужно создать
-        screen.blit(skill_list[num].getImagetodesk(), ((displayX - displayX / 9) / 3 + displayX / 9, displayY / 20))
+        PrintGlobalSkill(skill_list[num])
 
         for event in pygame.event.get():
 
@@ -180,11 +217,17 @@ def Game_1():
                 num += 1
                 # Выход из режима
                 if num == 10:
+                    time1 = time.time() - time1
+                    UnprintAll(first_color)
+                    UnprintGlobalSkill(third_color)
+                    text1 = f1.render(str(round(time1, 2)) + "сек", True, second_color)
+                    screen.blit(text1, ((displayX - displayX/9)/2, displayY/2))
                     run = False
                     break
 
             # Выход из режима
             if event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
+                UnprintAll(first_color)
                 run = False
                 break
 
@@ -200,11 +243,13 @@ def Game_1():
         PrintSkills(active_skills)
 
         # Отрисовка Invoke
-        screen.blit(invoke, (displayX / 9 + displayX / 9 * 5 + displayX / 9, displayY - displayY / 4))
+        PrintInvoke()
 
         # Обновление экрана
         pygame.display.update()
         clock.tick(60)
+
+
 # Игра 2
 def Game_2():
     name = "Infinity"
@@ -221,7 +266,7 @@ def Game_2():
     while run:
 
         # Отрисовка способности, которую нужно создать
-        screen.blit(new_skill.getImagetodesk(), ((displayX - displayX / 9) / 3 + displayX / 9, displayY / 20))
+        PrintGlobalSkill(new_skill)
 
         for event in pygame.event.get():
 
@@ -288,7 +333,7 @@ def Game_2():
         PrintSkills(active_skills)
 
         # Отрисовка Invoke
-        screen.blit(invoke, (displayX / 9 + displayX / 9 * 5 + displayX / 9, displayY - displayY / 4))
+        PrintInvoke()
 
         # Обновление экрана
         pygame.display.update()
