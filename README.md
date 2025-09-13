@@ -6,7 +6,7 @@
 
 ---
 
-**Doesn't worck without pygame**
+**Doesn't work without pygame**
 ```python
 pip install pygame
 ```
